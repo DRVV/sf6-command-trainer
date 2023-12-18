@@ -22,11 +22,28 @@
         :style="{ gridArea: arrow.direction.toLowerCase()}"
       />
     </div>
+
+    <div class="drive-button-container">
+      <img 
+        v-for="button in driveButtons"
+        :key="button.name"
+        :src="button.src"
+        :alt="`${button.name}`"
+        :class="{active: keysPressed[button.key]}"
+        :style="{gridArea: button.name}"
+      />
+    </div>    
   </div>
+
+  <CommandList class="command"/>
+
+  
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import CommandList from './components/CommandList.vue';
+
 
   export default defineComponent({
     data() {
@@ -42,20 +59,26 @@ import { defineComponent } from 'vue';
         {name: 'small', key: 's', src: '/img/attack-small-button.png'},
         {name: 'middle', key: 'd', src: '/img/attack-middle-button.png'},
         {name: 'strong', key: 'f', src: '/img/attack-strong-button.png'}
+        ],
+        driveButtons: [
+          {name: 'parry', key: ' ', src: '/img/drive-parry.png'}
         ]
       }
     },
     methods: {
       handleKeydown(e: KeyboardEvent) {
         const key = e.key;
-        if (['j', 'i', 'k', 'l', 's', 'd', 'f'].includes(key)) {
+        if (['j', 'i', 'k', 'l', 's', 'd', 'f', ' '].includes(key)) {
           this.keysPressed[e.key] = true;
         }
       }, 
       handleKeyup(e: KeyboardEvent) {
         this.keysPressed[e.key] = false;
       }
-    }, 
+    },
+    components:{
+      CommandList
+    } 
     // mounted() {
     //   (this.$el as HTMLElement).focus();
     // }
@@ -65,6 +88,11 @@ import { defineComponent } from 'vue';
 <style>
   #app {
     outline:none;
+    display: grid;
+    grid-template-areas: 
+      "arrow-container attack-buttonscontainer"
+    ;
+    grid-gap: 10px;
 
   }
   img {
