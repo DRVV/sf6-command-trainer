@@ -1,14 +1,14 @@
 <template>
   <div id="app" @keydown="handleKeydown" @keyup="handleKeyup" tabindex="0">
 
-    <div class="attack-button-container">
+    <div class="attack-buttonscontainer">
       <img
         v-for="button in attackButtons"
         :key="button.name"
         :src="button.src"
         :alt="`${button.name} attack`"
-        :class="{active: currentKey === button.key}"
-        :style="{gridArea: button.name}"
+        :class="{active: keysPressed[button.key]}"
+        :style="{gridArea: button.name.toLowerCase()}"
       />
     </div>
 
@@ -18,7 +18,7 @@
         :key="arrow.direction"
         :src="arrow.src"
         :alt="`${arrow.direction} Arrow`"
-        :class="{active: currentKey === arrow.key}"
+        :class="{active: keysPressed[arrow.key]}"
         :style="{ gridArea: arrow.direction.toLowerCase()}"
       />
     </div>
@@ -31,7 +31,7 @@ import { defineComponent } from 'vue';
   export default defineComponent({
     data() {
       return {
-        currentKey: '',
+        keysPressed:{} as Record<string, boolean>,
         arrows: [
           {direction: 'Up', key: 'i', src: '/img/up-arrow.png'},
           {direction: 'Down', key: 'k', src: '/img/down-arrow.png'},
@@ -39,9 +39,9 @@ import { defineComponent } from 'vue';
           {direction: 'Right', key: 'l', src: '/img/right-arrow.png'}
         ],
         attackButtons: [
-        {name: 'a_small', key: 's', src: '/img/attack-small-button.png'},
-        {name: 'a_middle', key: 'd', src: '/img/attack-middle-button.png'},
-        {name: 'a_strong', key: 'f', src: '/img/attack-strong-button.png'}
+        {name: 'small', key: 's', src: '/img/attack-small-button.png'},
+        {name: 'middle', key: 'd', src: '/img/attack-middle-button.png'},
+        {name: 'strong', key: 'f', src: '/img/attack-strong-button.png'}
         ]
       }
     },
@@ -49,11 +49,11 @@ import { defineComponent } from 'vue';
       handleKeydown(e: KeyboardEvent) {
         const key = e.key;
         if (['j', 'i', 'k', 'l', 's', 'd', 'f'].includes(key)) {
-          this.currentKey = key;
+          this.keysPressed[e.key] = true;
         }
       }, 
-      handleKeyup() {
-        this.currentKey = '';
+      handleKeyup(e: KeyboardEvent) {
+        this.keysPressed[e.key] = false;
       }
     }, 
     // mounted() {
@@ -69,7 +69,7 @@ import { defineComponent } from 'vue';
   }
   img {
     width: 50px;
-    opacity: 0.5;
+    opacity: 0.2;
   }
   img.active{
     opacity: 1;
@@ -81,14 +81,14 @@ import { defineComponent } from 'vue';
       "left . right"
       ". down .";
     grid-gap: 10px;
-  };
-  .attack-buttons-container {
+  }
+  .attack-buttonscontainer {
     display: grid;
     grid-template-areas:
-      "small . middle . strong"
+      ". . ."
+      "small middle strong"
+      ". . ."
     ;
-    column-gap: 10px;
-    
-  }
-  
+    grid-gap: 10px;
+  }  
 </style>
