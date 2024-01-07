@@ -1,13 +1,13 @@
-
-function getFrame(time_elapsed_in_millisecond) {
-    /*
-    convert time (ms) to frame.
-    */
-    const FPS = 60;
-    var frame = (time_elapsed_in_millisecond / 1000) * FPS
+import {convertToFrame} from './frame.js'
+// function getFrame(time_elapsed_in_millisecond) {
+//     /*
+//     convert time (ms) to frame.
+//     */
+//     const FPS = 60;
+//     var frame = (time_elapsed_in_millisecond / 1000) * FPS
     
-    return Math.floor(frame)
-}
+//     return Math.floor(frame)
+// }
 
 function evaluateTimeDifference(time_difference) {
     if (time_difference < 3) {
@@ -33,7 +33,7 @@ function scoreInput(inputKey, inputTime, idealKeystrokes) {
     */
     const BUFFER = 10;
 
-    var inputFrame = getFrame(inputTime);
+    var inputFrame = convertToFrame(inputTime);
     // var subList = idealKeystrokes[inputFrame-BUFFER: inputFrame+BUFFER] 
     let startFrame = inputFrame - BUFFER
     let subList = idealKeystrokes.slice(startFrame, inputFrame + BUFFER);
